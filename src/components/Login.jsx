@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
 import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const [name, setName] = useState("");
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
 
@@ -13,43 +11,32 @@ const Signup = () => {
   let handleSubmit = async (e) => {
     e.preventDefault();
 
-    let { data } = await axios.post("http://localhost:7070/register", {
-      name,
+    let { data } = await axios.post("http://localhost:7070/login", {
       email,
       password,
     });
 
-    navigate("/login");
+    if (data === "success") {
+      navigate("/home");
+    } else if (data === "password is not matched") {
+      alert("password not matched");
+    } else {
+      alert("user not found");
+    }
 
     console.log(data);
   };
-
   return (
     <>
       <div className="d-flex align-items-center justify-content-center bg-secondary vh-100">
         <div className="bg-white p-3 rounded w-25">
-          <h2>Register</h2>
+          <h2>Login</h2>
 
           <form onSubmit={handleSubmit} action="">
             <div className="mb-3">
               <label htmlFor="">
-                <strong>Name</strong>
-              </label>
-
-              <input
-                type="text"
-                placeholder="Enter your name"
-                className="form-control rounded-0"
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="">
                 <strong>Email</strong>
               </label>
-
               <input
                 type="email"
                 placeholder="Enter your Email"
@@ -75,21 +62,12 @@ const Signup = () => {
               />
             </div>
 
-            <button className="btn btn-success w-100 rounded-0">Sign up</button>
+            <button className="btn btn-success w-100 rounded-0">Log in</button>
           </form>
-
-          <p>Already Have an Account ?</p>
-
-          <Link
-            to={"/login"}
-            className="btn btn btn-default border text-decoration-none bg-light w-100 rounded-0"
-          >
-            Log in
-          </Link>
         </div>
       </div>
     </>
   );
 };
 
-export default Signup;
+export default Login;
